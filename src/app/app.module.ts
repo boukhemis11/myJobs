@@ -9,6 +9,10 @@ import { JobListComponent } from './job-list/job-list.component';
 import { JobsService } from './jobs.service';
 import { AddJobComponent } from './add-job/add-job.component';
 import { DaysAgoPipe } from './days-ago.pipe';
+import { HomeComponent } from './home/home.component';
+import { JobDetailsComponent } from './job-details/job-details.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +20,17 @@ import { DaysAgoPipe } from './days-ago.pipe';
     SearchComponent,
     JobListComponent,
     AddJobComponent,
-    DaysAgoPipe
+    DaysAgoPipe,
+    HomeComponent,
+    JobDetailsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
+    AppRoutingModule
   ],
   providers: [JobsService],
   bootstrap: [AppComponent]
