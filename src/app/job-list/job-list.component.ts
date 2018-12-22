@@ -16,11 +16,14 @@ export class JobListComponent implements OnInit {
 
   ngOnInit() {
     this.jobService.getAllJobs()
-        .subscribe(data => this.jobs = data,
-                   err => {
-                     console.error(err);
-                    }
-                    );
+      .subscribe(data => this.jobs = data,
+                  err => {
+                    console.error(err);
+                          });
+    this.jobService.jobSubject.subscribe(data => {
+      console.log(data);
+      this.jobs = [data , ...this.jobs];
+    });
   }
-
 }
+
