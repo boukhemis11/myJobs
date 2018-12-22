@@ -13,12 +13,14 @@
               class="form-control"
               placeholder="nom de votre entreprise"
               formControlName="company">
+
       <label for="city">ville</label>
       <input type="text"
               name="city"
               class="form-control"
               placeholder="ville du poste proposé"
               formControlName="city">
+
       <label for="zipcode">code postal</label>
       <input type="text"
               name="zipcode"
@@ -29,7 +31,75 @@
 
     <div class="form-group col-sm-6">
       <label for="description">description</label><br>
-      <textarea name="description" cols="30" rows="10" formControlName="description"></textarea>
+      <textarea class="form-control" name="description" cols="30" rows="10" formControlName="description"></textarea>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="contract">contrat</label>
+      <select multiple class="form-control" name="contract" formControlName="contract">
+        <option *ngFor="let ct of contractTypes" [value]="ct.value">{{ct.name}}</option>
+      </select>
+
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="salary">salaire</label>
+      <input type="text"
+              name="salary"
+              class="form-control "
+              placeholder="salaire"
+              formControlName="salary">
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="salary">device</label>
+      <select name="currency" formControlName="currency" class="currency form-control">
+        <option *ngFor="let curr of currencies" [value]="curr.value">{{curr.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="experience">expérience</label>
+      <select class="form-control" name="experience" formControlName="experience">
+        <option *ngFor="let exp of experience" [value]="exp.value">{{exp.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="status">statut</label>
+      <select class="form-control" name="status" formControlName="status">
+        <option *ngFor="let status of statuses" [value]="status.value">{{status.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="area">déplacements</label><br>
+      <div *ngFor="let area of areas">
+        <input type="radio"
+                [id]='"btn-" + area.value'
+                name="area"
+                [value]="area.value"
+                formControlName="area"> <label [for]='"btn-" + area.value'>{{area.name}}</label>
+      </div>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="field">secteur</label>
+      <input type="text"
+              name="field"
+              class="form-control"
+              placeholder="secteur d'activité"
+              formControlName="field"
+      >
+    </div>
+
+    <div class="form-group col-sm-6">
+      <label for="field">date de démarrage</label>
+      <input type="date"
+              name="startdate"
+              class="form-control"
+              formControlName="startdate"
+      >
     </div>
 
     <div class="form-group col-sm-6">
