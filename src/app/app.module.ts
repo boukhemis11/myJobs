@@ -14,6 +14,7 @@ import { JobDetailsComponent } from './job-details/job-details.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './about/about.component';
 import { ToShortDatePipe } from './to-short-date.pipe';
+import { SearchResultComponent } from './search-result/search-result.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ToShortDatePipe } from './to-short-date.pipe';
     HomeComponent,
     JobDetailsComponent,
     AboutComponent,
-    ToShortDatePipe
+    ToShortDatePipe,
+    SearchResultComponent
   ],
   imports: [
     BrowserModule,

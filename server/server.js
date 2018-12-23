@@ -30,6 +30,18 @@ api.post('/jobs', (req, res) => {
   addedJobs = [job, ...addedJobs];
 })
 
+api.get('/search/:term/:place?', (req, res) => {
+  const term = req.params.term.toLowerCase().trim();
+  let place = req.params.place;
+  let jobs = getAllJobs().filter(job => (job.description.toLowerCase().includes(term) || job.title.toLowerCase().includes(term)))
+  if(place) {
+    place = place.toLowerCase().trim();
+    jobs = getAllJobs().filter(job => (job.city.toLowerCase().includes(place)));
+  }
+  res.json({success: true, jobs});
+
+})
+
 api.get('/jobs/:id', (req, res) => {
   const id = req.params.id
 
