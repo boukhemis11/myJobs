@@ -1,14 +1,47 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+let data = require('./jobs');
+
+let initialJobs = data.jobs;
+let addedJobs = [];
+
+const getAllJobs = () => {
+  return [...addedJobs, ...initialJobs];
+}
+
 
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  next();
+})
 
 const api = express.Router();
 
 api.get('/jobs', (req, res) => {
-  res.json({success: true, message: 'hello world'});
+  res.json(getAllJobs());
 });
+
+api.post('/jobs', (req, res) => {
+  const job = req.body
+  addedJobs = [job, ...addedJobs];
+})
+
+api.get('/jobs/:id', (req, res) => {
+  const id = req.params.id
+
+  const job = getAllJobs().filter(job => job.id == id);
+  console.log(getAllJobs())
+  if(job.length === 1){
+    res.json(job[0]);
+  }else {
+    res.json({success : false, message : `no job with id = ${id}`})
+  }
+
+})
 
 app.use('/api', api);
 

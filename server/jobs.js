@@ -1,4 +1,4 @@
-[
+exports.jobs = [
   {
     "id": 1,
     "title": "Développeur JavaScript",

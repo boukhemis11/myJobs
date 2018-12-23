@@ -1,3 +1,27 @@
-<p>
-  job-details works!
-</p>
+<div *ngIf="jobDetail">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3>{{jobDetail.title}}</h3></div>
+      <div class="panel-body">
+        {{jobDetail.company}} <br>
+        {{jobDetail.city}} - {{jobDetail.zipcode}} <br>
+        {{jobDetail.contract}} <br>
+        <hr>
+        publié le {{jobDetail.publishdate | toShortDate}} <br>
+        actualisé le {{jobDetail.lastupdate | toShortDate}} <br>
+        salaire : {{jobDetail.salary}} <br>
+        <hr>
+        <b>Descriptif du poste</b>
+        <div>
+          {{jobDetail.description}}
+        </div>
+        <hr>
+        <div>
+          date de démarrage : {{jobDetail.startdate}} <br>
+          statut : {{jobDetail.status}} <br>
+          déplacements : {{jobDetail.area}}
+
+        </div>
+
+      </div>
+    </div>
+  </div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { JobsService } from '../jobs.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-job-details',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JobDetailsComponent implements OnInit {
 
-  constructor() { }
+jobDetail = null;
+
+  constructor(private jobService: JobsService, private activetedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    const id = this.activetedRoute.snapshot.params.id;
+
+    this.jobService.getJob(id).subscribe(
+      data => {
+        this.jobDetail = data;
+      }
+
+    );
   }
 
 }

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { JobsService } from '../jobs.service';
-import { error } from 'util';
-
 
 @Component({
   selector: 'app-job-list',
@@ -18,7 +16,7 @@ export class JobListComponent implements OnInit {
     this.jobService.getAllJobs()
       .subscribe(data => this.jobs = data,
                   err => {
-                    console.error(err);
+                  console.error(err);
                           });
     this.jobService.jobSubject.subscribe(data => {
       console.log(data);

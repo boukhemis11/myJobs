@@ -1,5 +1,6 @@
 <div class="card bg-light mb-3" *ngFor="let job of jobs">
-    <div class="card-header">{{job.title}}
+    <div class="card-header">
+      <h3><a [routerLink]="['/jobs', job.id]" routerLinkActive="router-link-active" >{{job.title}}</a></h3>
         <div>{{job.company}} - {{job.city}} - {{job.zipcode}}</div>
     </div>
     <div class="card-body">

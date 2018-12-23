@@ -12,33 +12,27 @@ export class JobsService {
   initialJobs = [];
   jobs = [];
   jobSubject = new Subject();
+  BASE_URL = 'http://localhost:4444/';
 
   constructor(private http: Http) {}
 
   getAllJobs() {
-    if (this.jobs.length > 0 && this.initialJobs.length > 0) {
-       console.log('case if ', this.jobs);
-    return of([...this.jobs, ...this.initialJobs]);
-    } else if (this.jobs.length > 0 && this.initialJobs.length === 0) {
-    console.log('case else if');
-    return this.http.get('data/jobs.json')
-        .pipe(map(res => res.json()))
-        .pipe(tap(data => {
-          this.initialJobs = data;
-          this.jobs = [...this.jobs, ...this.initialJobs];
-        }));
-    } else {
-    console.log('case else');
-    return this.http.get('data/jobs.json')
-            .pipe(map(res => res.json()))
-            .pipe(tap(data => this.initialJobs = data));
-    }
+    return this.http.get(this.BASE_URL + 'api/jobs')
+            .pipe(map(res => res.json()));
+  }
+
+  getJob(id) {
+    return this.http.get(this.BASE_URL + `api/jobs/${id}`)
+            .pipe(map(res => res.json()));
   }
 
   addJob(jobData) {
     jobData.id = Date.now();
-    this.jobs = [jobData, ...this.jobs];
-    return this.jobSubject.next(jobData);
+    return this.http.post(this.BASE_URL + 'api/jobs', jobData)
+          .pipe(map(res => {
+            console.log(res);
+            this.jobSubject.next(jobData);
+        }));
   }
 }
 
