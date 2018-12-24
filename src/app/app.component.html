@@ -16,6 +16,17 @@
           <a class="nav-link" href="#" [routerLink]="['/about']">à propos</a>
         </li>
       </ul>
+      <ul class=navbar-nav>
+        <li class="nav-item dropdown my-2 my-lg-0 mr-0">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Compte
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#" [routerLink]="['/login']" *ngIf="!authService.userIsLoggedIn()">se connecter</a>
+              <a class="dropdown-item" (click)="authService.logOut()" *ngIf="authService.userIsLoggedIn()">se déconnecter</a>
+            </div>
+          </li>
+        </ul>
     </div>
   </nav>
 

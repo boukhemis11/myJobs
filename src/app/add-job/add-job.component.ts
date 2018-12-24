@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup} from '@angular/forms';
 import { JobsService } from '../jobs.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-job',

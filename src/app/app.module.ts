@@ -15,6 +15,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './about/about.component';
 import { ToShortDatePipe } from './to-short-date.pipe';
 import { SearchResultComponent } from './search-result/search-result.component';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { SearchResultComponent } from './search-result/search-result.component';
     JobDetailsComponent,
     AboutComponent,
     ToShortDatePipe,
-    SearchResultComponent
+    SearchResultComponent,
+    AuthenticationComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

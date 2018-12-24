@@ -2,24 +2,50 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 let data = require('./jobs');
+const jwt = require('jsonwebtoken');
+
+const secret = '7b9dd39c13979d65273bb2e0f3e91b87bbda3751';
 
 let initialJobs = data.jobs;
 let addedJobs = [];
+const fakeUser = {email:'boukh@gmail.com', password:'boukh'}
 
 const getAllJobs = () => {
   return [...addedJobs, ...initialJobs];
 }
 
-
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
-  next();
-})
+  res.set({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Headers": "'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'",
+  });
 
+  next();
+});
+const auth = express.Router();
 const api = express.Router();
+
+
+auth.post('/login', (req, res) => {
+  if(req.body) {
+    const email = req.body.email.toLocaleLowerCase();
+    const password = req.body.password.toLocaleLowerCase();
+    if(email === fakeUser.email && password === fakeUser.password) {
+      //res.json({success:true, data:req.body})
+      const token = jwt.sign( {iss:'http://localhost:4444', role:'admin', email: req.body.email}, secret)
+      res.json({success:true, token})
+    } else {
+      res.json({ success: false, message : 'indentifiants incorrects' });
+      res.status(401).json({ success: false, message : 'identifiants incorrects' });
+    }
+  } else {
+    res.json({ success: false, message: 'données manquantes'});
+    res.status(500).json({ success: false, message: 'données manquantes'});
+  }
+})
 
 api.get('/jobs', (req, res) => {
   res.json(getAllJobs());
@@ -44,9 +70,7 @@ api.get('/search/:term/:place?', (req, res) => {
 
 api.get('/jobs/:id', (req, res) => {
   const id = req.params.id
-
   const job = getAllJobs().filter(job => job.id == id);
-  console.log(getAllJobs())
   if(job.length === 1){
     res.json(job[0]);
   }else {
@@ -56,6 +80,7 @@ api.get('/jobs/:id', (req, res) => {
 })
 
 app.use('/api', api);
+app.use('/auth', auth);
 
 const port = 4444;
 app.listen(port, () => {
