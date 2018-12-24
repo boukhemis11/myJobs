@@ -24,6 +24,8 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#" [routerLink]="['/login']" *ngIf="!authService.userIsLoggedIn()">se connecter</a>
               <a class="dropdown-item" (click)="authService.logOut()" *ngIf="authService.userIsLoggedIn()">se déconnecter</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/register']" *ngIf="!authService.userIsLoggedIn()">créer un compte</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/profile']" *ngIf="authService.userIsLoggedIn()">mon compte</a>
             </div>
           </li>
         </ul>

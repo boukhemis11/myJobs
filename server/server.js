@@ -8,7 +8,8 @@ const secret = '7b9dd39c13979d65273bb2e0f3e91b87bbda3751';
 
 let initialJobs = data.jobs;
 let addedJobs = [];
-const fakeUser = {email:'boukh@gmail.com', password:'boukh'}
+let users = [];
+const fakeUser = {id: 1, nickname: 'koko', email:'boukh@gmail.com', password:'boukh'}
 
 const getAllJobs = () => {
   return [...addedJobs, ...initialJobs];
@@ -44,6 +45,19 @@ auth.post('/login', (req, res) => {
   } else {
     res.json({ success: false, message: 'données manquantes'});
     res.status(500).json({ success: false, message: 'données manquantes'});
+  }
+})
+
+auth.post('/register', (req, res) => {
+  console.log(req.body)
+  if (req.body) {
+    const email = req.body.email.toLocaleLowerCase().trim();
+    const nickname = req.body.nickname.toLocaleLowerCase().trim();
+    const password = req.body.password
+    users = [{id: Date.now, nickname:nickname, email: email, password: password}, ...users]
+    res.json({success: true, users: users})
+  }else {
+    res.json({success:false, message: 'la création a échoué'})
   }
 })
 

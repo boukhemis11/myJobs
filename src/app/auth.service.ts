@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as jwtDecode from 'jwt-decode';
 
 
 @Injectable({
@@ -18,6 +19,12 @@ export class AuthService {
               .pipe(map(res => res.json()));
   }
 
+  register(credentials) {
+    console.log(credentials);
+    return  this.http.post(this.BASE_URL + 'register', credentials)
+              .pipe(map(res => res.json()));
+  }
+
   userIsLoggedIn() {
     return localStorage.getItem('job-data');
   }
@@ -25,5 +32,9 @@ export class AuthService {
   logOut() {
     localStorage.removeItem('job-data');
     this.router.navigate(['/home']);
+  }
+
+  decodeToken(token) {
+    jwtDecode(token);
   }
 }
