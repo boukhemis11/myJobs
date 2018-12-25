@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup} from '@angular/forms';
 import { JobsService } from '../jobs.service';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-add-job',
@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 export class AddJobComponent implements OnInit {
 
   form: FormGroup;
+  userIsLoggedin = false;
 
   contractTypes = [
     { id: 1, name: 'stage', value: 'internship' },
@@ -45,7 +46,7 @@ export class AddJobComponent implements OnInit {
     {id: 4, name: 'déplacements internationaux', value: 'international'}
   ];
 
-  constructor(private formBuilder: FormBuilder, private jobService: JobsService) { }
+  constructor(private formBuilder: FormBuilder, private jobService: JobsService, private authService: AuthService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -67,10 +68,18 @@ export class AddJobComponent implements OnInit {
       lastupdate: new Date()
 
     });
+    this.checkUserIsLoggedin();
   }
 
   createJob(jobData) {
-    this.jobService.addJob(jobData).subscribe();
+    const token = JSON.parse(localStorage.getItem('job-data')).token;
+    this.jobService.addJob(jobData, token).subscribe();
     this.form.reset();
+  }
+
+  checkUserIsLoggedin() {
+    if (this.authService.userIsLoggedIn()) {
+      this.userIsLoggedin = true;
+    }
   }
 }

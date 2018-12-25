@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions  } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import * as jwtDecode from 'jwt-decode';
@@ -11,6 +11,7 @@ import * as jwtDecode from 'jwt-decode';
 export class AuthService {
 
   BASE_URL = 'http://localhost:4444/auth/';
+  decodedToken = null;
 
   constructor(private router: Router, private http: Http) { }
 
@@ -26,7 +27,7 @@ export class AuthService {
   }
 
   userIsLoggedIn() {
-    return localStorage.getItem('job-data');
+    return !!localStorage.getItem('job-data');
   }
 
   logOut() {
@@ -35,6 +36,13 @@ export class AuthService {
   }
 
   decodeToken(token) {
-    jwtDecode(token);
+    return jwtDecode(token);
+  }
+
+  addAuthorizationHeader(token) {
+    const authorizationHeader = new Headers({
+      'Authorization': 'Bearer ' + token
+    });
+    return new RequestOptions({ headers: authorizationHeader });
   }
 }

@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
 
   registerSuccess(data) {
     this.info = data;
-    localStorage.setItem('job-data', JSON.stringify(data));
+    // localStorage.setItem('job-data', JSON.stringify(data));
     this.router.navigate(['/login']);
   }
 

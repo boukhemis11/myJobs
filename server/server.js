@@ -8,8 +8,7 @@ const secret = '7b9dd39c13979d65273bb2e0f3e91b87bbda3751';
 
 let initialJobs = data.jobs;
 let addedJobs = [];
-let users = [];
-const fakeUser = {id: 1, nickname: 'koko', email:'boukh@gmail.com', password:'boukh'}
+let users = [{id: 1, nickname: 'koko', email:'boukh@gmail.com', password:'boukh'}];
 
 const getAllJobs = () => {
   return [...addedJobs, ...initialJobs];
@@ -18,23 +17,41 @@ const getAllJobs = () => {
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.set({
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "*",
-      "Access-Control-Allow-Headers": "'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'",
-  });
-
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
+const checkUserToken = (req, res, next) => {
+  // check that the user sent a token in the request header
+  if(!req.header('authorization')) {
+    // no header, no need to go further
+    return res.status(401).json({ success: false, message: "Header d'authentification manquant"});
+  }
+
+  const authorizationHeaderParts = req.header('authorization').split(' ');
+  // parts are 'Bearer theToken'
+  let token = authorizationHeaderParts[1];
+  jwt.verify(token, secret, (err, decodedToken) => {
+    if(err) {
+      return res.status(401).json({ success: false, message: "Token non valide"});
+    } else {
+      console.log('decodedToken ', decodedToken);
+      next();
+    }
+  });
+};
+
 const auth = express.Router();
 const api = express.Router();
-
 
 auth.post('/login', (req, res) => {
   if(req.body) {
     const email = req.body.email.toLocaleLowerCase();
     const password = req.body.password.toLocaleLowerCase();
-    if(email === fakeUser.email && password === fakeUser.password) {
+    const index = users.findIndex(user => user.email = email );
+    console.log('index ', index);
+    if (index > -1 && users[index].password === password) {
       //res.json({success:true, data:req.body})
       const token = jwt.sign( {iss:'http://localhost:4444', role:'admin', email: req.body.email}, secret)
       res.json({success:true, token})
@@ -52,7 +69,7 @@ auth.post('/register', (req, res) => {
   console.log(req.body)
   if (req.body) {
     const email = req.body.email.toLocaleLowerCase().trim();
-    const nickname = req.body.nickname.toLocaleLowerCase().trim();
+    const nickname = req.body.nickname.trim();
     const password = req.body.password
     users = [{id: Date.now, nickname:nickname, email: email, password: password}, ...users]
     res.json({success: true, users: users})
@@ -65,9 +82,10 @@ api.get('/jobs', (req, res) => {
   res.json(getAllJobs());
 });
 
-api.post('/jobs', (req, res) => {
+api.post('/jobs',checkUserToken, (req, res) => {
   const job = req.body
   addedJobs = [job, ...addedJobs];
+  res.json(job);
 })
 
 api.get('/search/:term/:place?', (req, res) => {
@@ -79,7 +97,6 @@ api.get('/search/:term/:place?', (req, res) => {
     jobs = getAllJobs().filter(job => (job.city.toLowerCase().includes(place)));
   }
   res.json({success: true, jobs});
-
 })
 
 api.get('/jobs/:id', (req, res) => {
@@ -90,7 +107,6 @@ api.get('/jobs/:id', (req, res) => {
   }else {
     res.json({success : false, message : `no job with id = ${id}`})
   }
-
 })
 
 app.use('/api', api);
